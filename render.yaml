@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: gadfly-api
+    env: python
+    plan: starter
+    rootDir: backend
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: |
+      uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: GRANICUS_WORKERS
+        value: "4"
+    disk:
+      name: gadfly-data
+      mountPath: /data
+      sizeGB: 10
+    healthCheckPath: /api/health
+
+  - type: static
+    name: gadfly-ui
+    rootDir: frontend
+    buildCommand: "true"
+    staticPublishPath: .
+    envVars:
+      - key: API_BASE
+        value: https://gadfly-api.onrender.com
