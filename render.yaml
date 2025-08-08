@@ -21,11 +21,8 @@ services:
       sizeGB: 10
     healthCheckPath: /api/health
 
-  - type: static
+  - type: static_site
     name: gadfly-ui
     rootDir: frontend
-    buildCommand: "true"
-    staticPublishPath: .
-    envVars:
-      - key: API_BASE
-        value: https://gadfly-api.onrender.com
+    buildCommand: "true"          # no build step needed
+    staticPublishPath: .          # publish the whole folder
