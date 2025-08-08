@@ -1,0 +1,25 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gadfly UI</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@tanstack/react-query@5.56.2/build/umd/index.production.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/dayjs/dayjs.min.js"></script>
+    <script src="https://unpkg.com/@tabler/icons-webfont@latest/tabler-icons.min.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+      :root { color-scheme: light dark; }
+      body { height: 100vh; }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <div id="root" class="h-screen"></div>
+    <script type="text/babel" data-type="module" src="./app.jsx"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </body>
+</html>
