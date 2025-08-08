@@ -1,7 +1,7 @@
 services:
   - type: web
     name: gadfly-api
-    env: python
+    env: python            # (runtime: python is also fine; env is still accepted)
     plan: starter
     rootDir: backend
     buildCommand: |
@@ -21,8 +21,9 @@ services:
       sizeGB: 10
     healthCheckPath: /api/health
 
-  - type: static_site
+  - type: web
     name: gadfly-ui
+    runtime: static        # <-- this is the key bit
     rootDir: frontend
-    buildCommand: "true"          # no build step needed
-    staticPublishPath: .          # publish the whole folder
+    buildCommand: "true"   # nothing to build
+    staticPublishPath: .   # publish the whole folder
