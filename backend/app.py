@@ -1,20 +1,39 @@
+
+from pathlib import Path
+import os, json, datetime, subprocess, shutil
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-from pathlib import Path
-import os, json, subprocess, shutil, datetime
+from typing import Optional, Dict, Any
 
-# ---------- Config & paths ----------
-DATA_DIR = Path(os.environ.get("DATA_DIR", "/data")).resolve()
+
+# ---------- Config & paths (auto-detect) ----------
+
+def choose_base_dir() -> Path:
+    # 1) Respect explicit env var if it exists and looks valid
+    cand = os.environ.get("DATA_DIR")
+    if cand:
+        p = Path(cand)
+        if (p / "downloads").exists() or (p / "summaries").exists():
+            return p.resolve()
+    # 2) Probe common mounts
+    for d in ("/data", "/var/data"):
+        p = Path(d)
+        if (p / "downloads").exists() or (p / "summaries").exists():
+            return p.resolve()
+    # 3) Fallback
+    return Path("/data").resolve()
+
+DATA_DIR = choose_base_dir()
 DOWNLOADS_DIR = DATA_DIR / "downloads"
 SUMMARIES_DIR = DATA_DIR / "summaries"
 
-# Ensure folders exist
+# Ensure folders exist (won't harm if already there)
 DOWNLOADS_DIR.mkdir(parents=True, exist_ok=True)
 SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
 (DATA_DIR / "uploads").mkdir(parents=True, exist_ok=True)
+
 
 # ---------- App ----------
 app = FastAPI(title="Gadfly API")
@@ -50,12 +69,21 @@ def debug_fs():
             out.append({"dir": root, "files": files[:10], "files_count": len(files)})
         return out[:50]
     return {
-        "DATA_DIR": str(DATA_DIR),
-        "downloads_exists": DOWNLOADS_DIR.exists(),
-        "summaries_exists": SUMMARIES_DIR.exists(),
-        "downloads_tree": ls(DOWNLOADS_DIR),
-        "summaries_tree": ls(SUMMARIES_DIR),
+        "chosen_DATA_DIR": str(DATA_DIR),
+        "probe": {
+            "/data": {
+                "exists": Path("/data").exists(),
+                "downloads": ls(Path("/data") / "downloads"),
+                "summaries": ls(Path("/data") / "summaries"),
+            },
+            "/var/data": {
+                "exists": Path("/var/data").exists(),
+                "downloads": ls(Path("/var/data") / "downloads"),
+                "summaries": ls(Path("/var/data") / "summaries"),
+            },
+        },
     }
+
 
 # ---------- API: Jurisdictions / Meetings / Summaries ----------
 @app.get("/api/jurisdictions")
