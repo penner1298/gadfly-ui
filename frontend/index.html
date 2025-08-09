@@ -1,73 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!doctype html>
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
-    span.s1 {font-kerning: none}
-  </style>
-</head>
-<body>
-<p class="p1"><span class="s1">&lt;!doctype html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="utf-8" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Gadfly UI&lt;/title&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Your real API URL --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;window.API_BASE = "https://gadfly-api.onrender.com";&lt;/script&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- React (PRODUCTION UMD) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin&gt;&lt;/script&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- React Query (UMD) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/@tanstack/react-query@5.56.2/build/umd/index.production.js"&gt;&lt;/script&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Axios + Dayjs --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/axios/dist/axios.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/dayjs/dayjs.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Simple CSS (no Tailwind-in-browser to avoid eval) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="https://unpkg.com/water.css@2/out/light.css"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>/* minimal utility-ish styles so layout still looks good */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>body { background: #f8fafc; color: #0f172a; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.app-grid { display: grid; grid-template-columns: 1fr 1.3fr 1.6fr; gap: 16px; height: calc(100vh - 64px); }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; overflow: hidden; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.scroll { overflow: auto; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.muted { color: #64748b; font-size: 12px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.btn { border: 1px solid #e5e7eb; border-radius: 10px; padding: 8px 12px; background: #fff; cursor: pointer; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.btn[disabled] { opacity: .5; cursor: not-allowed; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.input { border: 1px solid #e5e7eb; border-radius: 10px; padding: 8px 10px; width: 280px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>header { position: sticky; top: 0; background: rgba(255,255,255,.85); backdrop-filter: blur(6px); border-bottom: 1px solid #e5e7eb; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>header .wrap { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 12px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>main { max-width: 1120px; margin: 0 auto; padding: 16px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;body&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;header&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="wrap"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div style="font-weight: 800; font-size: 20px;"&gt;🪰 Gadfly&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="muted"&gt;Jurisdictions • Meetings • Summaries&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div style="margin-left:auto;" id="search-slot"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;main&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div id="root" class="app-grid"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Your precompiled app (no Babel, no eval) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="./app.compiled.js"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gadfly UI</title>
+    <link rel="stylesheet" href="https://unpkg.com/water.css@2/out/light.css">
+    <style>
+      body { background: #f8fafc; color: #0f172a; }
+      main { max-width: 1120px; margin: 0 auto; padding: 16px; }
+    </style>
+  </head>
+  <body>
+    <main><div id="root"></div></main>
+    <script src="./config.js"></script>
+    <script src="./bundle.js" defer></script>
+  </body>
 </html>
