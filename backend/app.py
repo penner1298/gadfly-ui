@@ -6,6 +6,23 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import os, json, pathlib, subprocess, shutil, datetime
 
+
+from pathlib import Path
+import os
+
+DATA_DIR = Path(os.environ.get("DATA_DIR", "/data"))
+DOWNLOADS = DATA_DIR / "downloads"
+SUMMARIES = DATA_DIR / "summaries"
+
+def iter_pdfs():
+    # recursively find .pdf (case-insensitive)
+    if not DOWNLOADS.exists():
+        return []
+    return [p for p in DOWNLOADS.rglob("*") if p.is_file() and p.suffix.lower() == ".pdf"]
+
+
+
+
 DATA_DIR = pathlib.Path(os.environ.get("DATA_DIR", "./data")).resolve()
 DOWNLOADS_DIR = DATA_DIR / "downloads"
 SUMMARIES_DIR = DATA_DIR / "summaries"
@@ -70,57 +87,64 @@ def health():
 
 @app.get("/api/jurisdictions")
 def list_jurisdictions():
-    try:
-        with open(JURISDICTIONS_FILE, "r") as f:
-            all_j = json.load(f)
-    except FileNotFoundError:
-        all_j = []
-    # annotate with counts
-    for j in all_j:
-        j_id = j.get("id") or j.get("name")
-        j["id"] = j_id
-        # Count meetings by folders under downloads/<name>
-        ddir = DOWNLOADS_DIR / j.get("name", j_id).replace(" ", "_")
-        j["meetings"] = len([p for p in ddir.glob("**/*.pdf")])
-    return all_j
+    items = []
+    seen = set()
+    for p in iter_pdfs():
+        try:
+            rel = p.relative_to(DOWNLOADS)
+        except ValueError:
+            rel = p.name
+        parts = rel.parts
+        jur = parts[0] if len(parts) > 1 else "Root"
+        if jur not in seen:
+            seen.add(jur)
+            items.append({"id": jur, "name": jur})
+    return items
+
+
+
 
 @app.get("/api/meetings")
-def list_meetings(jurisdiction: Optional[str] = None):
-    meetings = []
-    roots = []
-    if jurisdiction:
-        roots = [(jurisdiction, DOWNLOADS_DIR / jurisdiction.replace(" ", "_"))]
-    else:
-        # all top level dirs
-        roots = [(p.name, p) for p in DOWNLOADS_DIR.glob("*") if p.is_dir()]
-    for jname, root in roots:
-        for pdf in root.glob("**/*.pdf"):
-            rel = pdf.relative_to(DOWNLOADS_DIR).as_posix()
-            meetings.append({
-                "id": rel,
-                "jurisdiction": jname,
-                "title": pdf.stem,
-                "path": rel,
-                "date": None
-            })
-    meetings.sort(key=lambda m: m["path"])
-    return meetings
+def list_meetings(jurisdiction: str | None = None):
+    out = []
+    for p in iter_pdfs():
+        rel = p.relative_to(DOWNLOADS)
+        parts = rel.parts
+        jur = parts[0] if len(parts) > 1 else "Root"
+        if jurisdiction and jurisdiction != jur:
+            continue
+        out.append({
+            "id": rel.as_posix(),
+            "title": p.stem,
+            "jurisdiction": jur,
+            "date": None,
+        })
+    out.sort(key=lambda m: m["title"], reverse=True)
+    return out
+
+
+
 
 @app.get("/api/summaries")
-def list_summaries(meeting_id: Optional[str] = None):
+def list_summaries(meeting_id: str | None = None):
     items = []
-    if meeting_id:
-        # match summaries for this meeting path (convention: same rel path under summaries with .json or .txt)
-        p_json = (SUMMARIES_DIR / meeting_id).with_suffix(".json")
-        p_txt = (SUMMARIES_DIR / meeting_id).with_suffix(".txt")
-        for p in [p_json, p_txt]:
-            if p.exists():
-                items.append(_summary_from_file(p))
-    else:
-        for p in SUMMARIES_DIR.glob("**/*"):
-            if p.suffix.lower() in [".json", ".txt"] and p.is_file():
-                items.append(_summary_from_file(p))
+    if not SUMMARIES.exists():
+        return items
+    for root, _, files in os.walk(SUMMARIES):
+        for f in files:
+            if f.lower().endswith((".json", ".txt")):
+                path = Path(root) / f
+                rel = path.relative_to(SUMMARIES).as_posix()
+                if meeting_id and not rel.startswith(meeting_id):
+                    continue
+                items.append({
+                    "id": rel,
+                    "preview": path.read_text(errors="ignore")[:1000]
+                })
     return items
+
+
+
 
 def _summary_from_file(path: pathlib.Path) -> Dict[str, Any]:
     try:
