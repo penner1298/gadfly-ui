@@ -14,6 +14,32 @@ JURISDICTIONS_FILE = pathlib.Path("./jurisdictions.json")
 
 app = FastAPI(title="Gadfly API")
 
+import os, json
+from pathlib import Path
+
+@app.get("/api/debug/fs")
+def debug_fs():
+    base = Path(os.environ.get("DATA_DIR", "/data"))
+    downloads = (base / "downloads")
+    summaries = (base / "summaries")
+    def ls(p):
+        if not p.exists():
+            return {"exists": False, "path": str(p)}
+        out = []
+        for root, dirs, files in os.walk(p):
+            out.append({"dir": root, "files": files[:10], "files_count": len(files)})
+        return out[:50]
+    return {
+        "DATA_DIR": str(base),
+        "downloads_exists": downloads.exists(),
+        "summaries_exists": summaries.exists(),
+        "downloads_tree": ls(downloads),
+        "summaries_tree": ls(summaries),
+    }
+
+
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
