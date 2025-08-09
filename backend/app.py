@@ -14,6 +14,17 @@ JURISDICTIONS_FILE = pathlib.Path("./jurisdictions.json")
 
 app = FastAPI(title="Gadfly API")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or lock to ["https://gadfly-ui.onrender.com"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 import os, json
 from pathlib import Path
 
