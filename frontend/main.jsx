@@ -1,5 +1,4 @@
 
-cat > frontend/main.jsx <<'EOF'
 import React from "react";
 import ReactDOM from "react-dom/client";
 import * as ReactQuery from "@tanstack/react-query";
