@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or lock to ["https://gadfly-ui.onrender.com"]
+    allow_origins=["https://gadfly-ui.onrender.com"],  # or ["*"] while testing
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
