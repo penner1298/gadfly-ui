@@ -1,15 +1,15 @@
 services:
   - type: web
     name: gadfly-api
-    env: python            # (runtime: python is also fine; env is still accepted)
+    env: python
     plan: starter
     rootDir: backend
     buildCommand: |
       pip install -r requirements.txt
-      startCommand: |
-    mkdir -p /var
-    ln -s /data /var/data
-    gunicorn -k uvicorn.workers.UvicornWorker app:app --bind 0.0.0.0:$PORT --timeout 120
+    startCommand: |
+      mkdir -p /var
+      ln -s /data /var/data || true
+      gunicorn -k uvicorn.workers.UvicornWorker app:app --bind 0.0.0.0:$PORT --timeout 120
     envVars:
       - key: DATA_DIR
         value: /data
@@ -25,7 +25,7 @@ services:
 
   - type: web
     name: gadfly-ui
-    runtime: static        # <-- this is the key bit
+    runtime: static
     rootDir: frontend
-    buildCommand: "true"   # nothing to build
-    staticPublishPath: .   # publish the whole folder
+    buildCommand: "true"
+    staticPublishPath: .
